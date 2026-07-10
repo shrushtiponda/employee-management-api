@@ -1,4 +1,4 @@
 module.exports = {
     EMPLOYEE_PREFIX: "EMP",
-    EMPLOYEE_ID_LENGTH: 3,
+    EMPLOYEE_ID_LENGTH: 4,
 };
