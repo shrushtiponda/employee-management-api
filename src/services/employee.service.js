@@ -39,6 +39,11 @@ const createEmployee = async (employeeData) => {
     return employee;
 };
 
+const getAllEmployees = async ()=>{
+    return await Employee.find();
+};
+
 module.exports = {
     createEmployee,
+    getAllEmployees
 };
