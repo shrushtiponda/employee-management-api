@@ -12,7 +12,13 @@ const getAllEmployees = asyncHandler(async (req,res)=>{
     return res.status(200).json( new ApiResponse(200,employees, "Employees fetched successfully") );
 });
 
+const getEmployee = asyncHandler(async (req, res)=>{
+    const employee = await employeeService.getEmployee(req.params.employeeId);
+    return res.status(200).json(new ApiResponse(200, employee, "employee fetched successfully"));
+});
+
 module.exports = {
     createEmployee,
-    getAllEmployees
+    getAllEmployees,
+    getEmployee
 };

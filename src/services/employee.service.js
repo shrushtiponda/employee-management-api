@@ -3,7 +3,7 @@ const {
     EMPLOYEE_PREFIX,
     EMPLOYEE_ID_LENGTH,
 } = require("../constants/employee.constants");
-
+const ApiError = require("../utils/ApiError");
 const generateEmployeeID = async () => {
 
     const highestEmployee = await Employee
@@ -43,7 +43,20 @@ const getAllEmployees = async ()=>{
     return await Employee.find();
 };
 
+const getEmployee = async (employeeId)=>{
+    const employee = await Employee.findOne({employeeId: employeeId},{
+        _id: 0,
+        __v: 0
+    });
+    if (!employee) {
+        throw new ApiError(404, "Employee not found");
+    }
+
+    return employee;
+}
+
 module.exports = {
     createEmployee,
-    getAllEmployees
+    getAllEmployees,
+    getEmployee
 };
