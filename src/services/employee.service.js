@@ -65,9 +65,20 @@ const updateEmployee = async (employeeId, updatedQuery)=>{
     return employee;
 }
 
+const deleteEmployee = async (employeeId)=>{
+    const employee = await Employee.findOneAndDelete({employeeId});
+
+    if (!employee) {
+        throw new ApiError(404, "Employee not found");
+    }
+
+    return employee;
+}
+
 module.exports = {
     createEmployee,
     getAllEmployees,
     getEmployee,
-    updateEmployee
+    updateEmployee,
+    deleteEmployee
 };

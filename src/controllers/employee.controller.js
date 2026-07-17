@@ -18,14 +18,19 @@ const getEmployee = asyncHandler(async (req, res)=>{
 });
 
 const updateEmployee = asyncHandler(async (req, res)=>{
-    console.log(req.body);
     const employee = await employeeService.updateEmployee(req.params.employeeId, req.body);
     return res.status(200).json(new ApiResponse(200, employee, "employee updated successfully"));
-})
+});
+
+const deleteEmployee = asyncHandler(async (req, res)=>{
+    const employee = await employeeService.deleteEmployee(req.params.employeeId);
+    return res.status(200).json( new ApiResponse(200,employee, "Employee deleted successfully") );
+});
 
 module.exports = {
     createEmployee,
     getAllEmployees,
     getEmployee,
-    updateEmployee
+    updateEmployee,
+    deleteEmployee
 };
