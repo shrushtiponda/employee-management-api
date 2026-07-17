@@ -17,8 +17,15 @@ const getEmployee = asyncHandler(async (req, res)=>{
     return res.status(200).json(new ApiResponse(200, employee, "employee fetched successfully"));
 });
 
+const updateEmployee = asyncHandler(async (req, res)=>{
+    console.log(req.body);
+    const employee = await employeeService.updateEmployee(req.params.employeeId, req.body);
+    return res.status(200).json(new ApiResponse(200, employee, "employee updated successfully"));
+})
+
 module.exports = {
     createEmployee,
     getAllEmployees,
-    getEmployee
+    getEmployee,
+    updateEmployee
 };

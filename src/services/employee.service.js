@@ -48,6 +48,16 @@ const getEmployee = async (employeeId)=>{
         _id: 0,
         __v: 0
     });
+    if (!employee) {    
+        throw new ApiError(404, "Employee not found");
+    }
+
+    return employee;
+}
+
+const updateEmployee = async (employeeId, updatedQuery)=>{
+    const employee = await Employee.findOneAndUpdate({employeeId}, updatedQuery, {new:true, runValidators: true});
+
     if (!employee) {
         throw new ApiError(404, "Employee not found");
     }
@@ -58,5 +68,6 @@ const getEmployee = async (employeeId)=>{
 module.exports = {
     createEmployee,
     getAllEmployees,
-    getEmployee
+    getEmployee,
+    updateEmployee
 };
