@@ -8,7 +8,7 @@ const createEmployee = asyncHandler(async (req, res) => {
 }); 
 
 const getAllEmployees = asyncHandler(async (req,res)=>{
-    const employees = await employeeService.getAllEmployees();
+    const employees = await employeeService.getAllEmployees(req.query);
     return res.status(200).json( new ApiResponse(200,employees, "Employees fetched successfully") );
 });
 
