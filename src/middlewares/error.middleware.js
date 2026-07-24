@@ -18,11 +18,26 @@ const errorHandler = (err, req, res, next) => {
         }));
     }
 
+    if (err.code === 11000) {
+        statusCode = 409;
+    
+        const field = Object.keys(err.keyPattern)[0];
+    
+        message = `${field} already exists`;
+    
+        errors = [
+            {
+                field,
+                message: `${field} already exists`
+            }
+        ];
+    }
+        
     return res.status(statusCode).json({
         statusCode,
         success: false,
-        message: err.message || "Internal Server Error",
-        errors: err.errors || []
+        message,
+        errors
     });
 
 };

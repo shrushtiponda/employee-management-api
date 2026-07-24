@@ -81,11 +81,11 @@ const getAllEmployees = async (queryParams)=>{
         ];
     }
 
-    if(department){
+    if (department) {
         query.department = department;
     }
 
-    if(designation){
+    if (designation) {
         query.designation = designation;
     }
 
