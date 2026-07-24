@@ -7,4 +7,9 @@ const registerUser = asyncHandler(async (req, res) => {
     return res.status(201).json( new ApiResponse(201, user, "User registered successfully") );
 }); 
 
-module.exports = { registerUser };
+const loginUser = asyncHandler(async (req, res) => {
+    const user = await userService.loginUser(req.body);
+    return res.status(200).json( new ApiResponse(200, user, "User logged in successfully") );
+}); 
+
+module.exports = { registerUser, loginUser };

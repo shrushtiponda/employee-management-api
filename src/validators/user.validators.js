@@ -37,4 +37,31 @@ const validateRegisterUser = (userData) => {
         return {name, email, password};
 }
 
-module.exports = { validateRegisterUser };
+const validateLoginUser = (userData) => {
+        //Required fileds
+        if (!userData.email?.trim()) {
+            throw new ApiError(400, "Email is required");
+        }
+        
+        if (!userData.password?.trim()) {
+            throw new ApiError(400, "Password is required");
+        }
+
+        const email = userData.email.trim().toLowerCase();
+        const password = userData.password.trim();
+ 
+
+        //Regex validations
+        if(!EMAIL_REGEX.test(email)){
+            throw new ApiError(400, "Invalid email");
+        }
+
+        if(!PASSWORD_REGEX.test(password)){
+            throw new ApiError(400, "Invalid password");
+        }
+
+        return {email, password};
+
+}
+
+module.exports = { validateRegisterUser, validateLoginUser };

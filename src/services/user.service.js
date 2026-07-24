@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 const userValidators = require("../validators/user.validators");
 const ApiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const registerUser = async (userData) => {
     const validatedUserData = userValidators.validateRegisterUser(userData);
@@ -13,8 +14,7 @@ const registerUser = async (userData) => {
     const hashedPassword = await bcrypt.hash(validatedUserData.password, 10);
   
     const user = {
-        name: validatedUserData.name,
-        email: validatedUserData.email,
+        ...validatedUserData,
         password: hashedPassword,
     };
 
@@ -24,8 +24,44 @@ const registerUser = async (userData) => {
 
     return registeredUser;
 };
+
+const loginUser = async (userData) => {
+    const validatedUserData = userValidators.validateLoginUser(userData);
+
+    const user = await User.findOne({email: validatedUserData.email}).select("+password");
+    
+    if(!user)
+        throw new ApiError(401, "Invalid email or password");
+
+    const passwordMatched = await bcrypt.compare(validatedUserData.password, user.password);
+    
+    if(!passwordMatched)
+        throw new ApiError(401, "Invalid email or password");
+
+    const token = jwt.sign({
+        id: user._id,
+        role: user.role
+    }, process.env.JWT_SECRET,
+    {
+        expiresIn: process.env.JWT_EXPIRES_IN
+    }
+    );
+
+    user.lastlogin = new Date();
+    await user.save();
+
+    const responseUser = {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    };
+    
+    return {user : responseUser, token };
+};
  
 
 module.exports = {
-    registerUser
+    registerUser,
+    loginUser
 }; 
