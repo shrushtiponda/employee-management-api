@@ -7,19 +7,31 @@ const asyncHandler = require("../utils/asyncHandler");
 
 const isAuthenticate = asyncHandler( async (req, res, next)=> {
     const authorization = req.header("Authorization");
+    if (
+        !authorization ||
+        !authorization.startsWith("Bearer ")
+    ) {
+        throw new ApiError(
+            401,
+            "Authentication required"
+        );
+    }
+    
     const token = authorization?.split(" ")[1];
-
+    let decoded = null;
+    
     if(!token){
         throw new ApiError(401, "Authentication required");
     }
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
+         decoded = jwt.verify(token, JWT_SECRET);
     } catch (error) {
         throw new ApiError(401, "Invalid or expired token");
     }
 
-    const user  = await User.findById(decoded.id);
+    const user  = await User.findById(decoded.id)
+                        .select("-password");
 
     if (!user || !user.isActive){
         throw new ApiError(401, "Unauthorized");
