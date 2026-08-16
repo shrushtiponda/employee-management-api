@@ -21,7 +21,7 @@ const { authorize } = require("../middlewares/authorize.middleware");
  *       content:
  *         application/json:
  *           schema:
- *             $ref: "#/components/schemas/Employee"
+ *             $ref: "#/components/schemas/EmployeeCreateRequest"
  *     responses:
  *       201:
  *         description: Employee created successfully

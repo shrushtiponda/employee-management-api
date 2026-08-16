@@ -28,7 +28,7 @@ const { USER_ROLES } = require("../constants/user.constants");
  *       409:
  *         description: User already exists
  */
-router.post("/", registerUser);
+router.post("/register", registerUser);
 
 /**
  * @swagger

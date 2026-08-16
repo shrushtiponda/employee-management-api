@@ -55,7 +55,70 @@ const options = {
             },
           },
         },
-    
+        EmployeeCreateRequest: {
+            type: "object",
+            required: [
+                "fullName",
+                "email",
+                "phone",
+                "department",
+                "designation",
+                "salary",
+                "dateOfJoining",
+                "dateOfBirth",
+                "noticePeriodDays"
+              ],
+            properties: {
+
+                fullName: {
+                    type: "string",
+                    example: "John Doe"
+                  },
+              
+                  email: {
+                    type: "string",
+                    format: "email",
+                    example: "john.doe@example.com"
+                  },
+              
+                  phone: {
+                    type: "string",
+                    example: "9876543210"
+                  },
+              
+                  department: {
+                    type: "string",
+                    example: "Engineering"
+                  },
+              
+                  designation: {
+                    type: "string",
+                    example: "Software Engineer"
+                  },
+              
+                  salary: {
+                    type: "number",
+                    example: 60000
+                  },
+              
+                  dateOfJoining: {
+                    type: "string",
+                    format: "date",
+                    example: "2026-08-17"
+                  },
+              
+                  dateOfBirth: {
+                    type: "string",
+                    format: "date",
+                    example: "1995-05-10"
+                  },
+              
+                  noticePeriodDays: {
+                    type: "integer",
+                    example: 30
+                  }
+            },  
+        },
         Employee: {
           type: "object",
           properties: {
