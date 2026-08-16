@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const userValidators = require("../validators/user.validators");
+const { USER_ROLES } = require("../constants/user.constants");
 const ApiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -60,8 +61,29 @@ const loginUser = async (userData) => {
     return {user : responseUser, token };
 };
  
+const updateUserRole = async (userId, role) => {
+    if (!Object.values(USER_ROLES).includes(role)) {
+        throw new ApiError(400, "Invalid role");
+      }
+    
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { role },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+    
+      if (!user) {
+        throw new ApiError(404, "User not found");
+      }
+    
+      return user;
+};
 
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    updateUserRole
 }; 
