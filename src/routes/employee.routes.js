@@ -5,6 +5,9 @@ const { USER_ROLES } =  require("../constants/user.constants");
 const { createEmployee, getAllEmployees, getEmployee, updateEmployee, deleteEmployee } = require("../controllers/employee.controller");
 const { isAuthenticate} = require("../middlewares/auth.middleware");
 const { authorize } = require("../middlewares/authorize.middleware");
+const validate = require("../middlewares/validate.middleware");
+const {  createEmployeeSchema, updateEmployeeSchema, getAllEmployeesQuerySchema, employeeIdParamSchema  } = require("../validators/employee.validator");
+
 
 /**
  * @swagger
@@ -32,7 +35,7 @@ const { authorize } = require("../middlewares/authorize.middleware");
  *       403:
  *         description: Only ADMIN and HR users can create employees
  */
-router.post("/", isAuthenticate, authorize(USER_ROLES.ADMIN, USER_ROLES.HR), createEmployee);
+router.post("/", isAuthenticate, authorize(USER_ROLES.ADMIN, USER_ROLES.HR), validate(createEmployeeSchema), createEmployee);
 
 /**
  * @swagger
@@ -104,7 +107,7 @@ router.post("/", isAuthenticate, authorize(USER_ROLES.ADMIN, USER_ROLES.HR), cre
  *       401:
  *         description: Authentication required
  */
-router.get("/", isAuthenticate, authorize(...Object.values(USER_ROLES)), getAllEmployees);
+router.get("/", isAuthenticate, authorize(...Object.values(USER_ROLES)), validate(getAllEmployeesQuerySchema, "query"), getAllEmployees);
 
 /**
  * @swagger
@@ -132,7 +135,7 @@ router.get("/", isAuthenticate, authorize(...Object.values(USER_ROLES)), getAllE
  *       404:
  *         description: Employee not found
  */
-router.get("/:employeeId", isAuthenticate, authorize(...Object.values(USER_ROLES)), getEmployee);
+router.get("/:employeeId", isAuthenticate, authorize(...Object.values(USER_ROLES)),  validate(employeeIdParamSchema, "params"), getEmployee);
 
 /**
  * @swagger
@@ -168,7 +171,8 @@ router.get("/:employeeId", isAuthenticate, authorize(...Object.values(USER_ROLES
  *       404:
  *         description: Employee not found
  */
-router.put("/:employeeId", isAuthenticate, authorize(USER_ROLES.ADMIN, USER_ROLES.HR, USER_ROLES.MANAGER), updateEmployee);
+router.put("/:employeeId", isAuthenticate, authorize(USER_ROLES.ADMIN, USER_ROLES.HR, USER_ROLES.MANAGER), validate(employeeIdParamSchema, "params"),
+validate(updateEmployeeSchema), updateEmployee);
 
 /**
  * @swagger
@@ -198,6 +202,6 @@ router.put("/:employeeId", isAuthenticate, authorize(USER_ROLES.ADMIN, USER_ROLE
  *       404:
  *         description: Employee not found
  */
-router.delete("/:employeeId", isAuthenticate, authorize(USER_ROLES.ADMIN), deleteEmployee);
+router.delete("/:employeeId", isAuthenticate, authorize(USER_ROLES.ADMIN), validate(employeeIdParamSchema, "params"), deleteEmployee);
 
 module.exports = router;

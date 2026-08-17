@@ -1,12 +1,10 @@
 const User = require("../models/user.model");
-const userValidators = require("../validators/user.validators");
 const { USER_ROLES } = require("../constants/user.constants");
 const ApiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (userData) => {
-    const validatedUserData = userValidators.validateRegisterUser(userData);
 
     const userExists = await User.findOne({email: validatedUserData.email});
     if(userExists)
@@ -27,8 +25,7 @@ const registerUser = async (userData) => {
 };
 
 const loginUser = async (userData) => {
-    const validatedUserData = userValidators.validateLoginUser(userData);
-
+    
     const user = await User.findOne({email: validatedUserData.email}).select("+password");
     
     if(!user)

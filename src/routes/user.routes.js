@@ -5,6 +5,8 @@ const { registerUser, loginUser, updateUserRole } = require("../controllers/user
 const { isAuthenticate } = require("../middlewares/auth.middleware");
 const { authorize } = require("../middlewares/authorize.middleware");
 const { USER_ROLES } = require("../constants/user.constants");
+const validate = require("../middlewares/validate.middleware");
+const { registerSchema, loginSchema, updateUserRoleSchema } = require("../validators/user.validator");
 
 /**
  * @swagger
@@ -28,7 +30,7 @@ const { USER_ROLES } = require("../constants/user.constants");
  *       409:
  *         description: User already exists
  */
-router.post("/register", registerUser);
+router.post("/register", validate(registerSchema), registerUser);
 
 /**
  * @swagger
@@ -49,7 +51,7 @@ router.post("/register", registerUser);
  *       401:
  *         description: Invalid credentials
  */
-router.post("/login", loginUser);
+router.post("/login",  validate(loginSchema), loginUser);
 
 /**
  * @swagger
@@ -84,6 +86,6 @@ router.post("/login", loginUser);
  *       404:
  *         description: User not found
  */
-router.patch("/:id/role", isAuthenticate, authorize(USER_ROLES.ADMIN), updateUserRole );
+router.patch("/:id/role", isAuthenticate, authorize(USER_ROLES.ADMIN),  validate(updateUserRoleSchema), updateUserRole );
 
 module.exports = router;
