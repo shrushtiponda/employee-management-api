@@ -1,229 +1,180 @@
 # Employee Management API
 
-A RESTful Employee Management API built with **Node.js**, **Express.js**, and **MongoDB** following a layered architecture (Routes → Controllers → Services → Models). The project demonstrates backend development best practices including CRUD operations, custom error handling, pagination, search, filtering, sorting, and clean code organization.
+A RESTful Employee Management API built with Node.js, Express.js, and MongoDB.
+
+The project demonstrates backend development concepts such as authentication, authorization, role-based access control (RBAC), request validation, API documentation, pagination, filtering, and sorting.
 
 ---
 
-## 🚀 Features
+## Features
+
+### Authentication
+
+- User registration
+- User login
+- JWT-based authentication
+- Password hashing with bcrypt
+
+### Authorization (RBAC)
+
+Four user roles are supported:
+
+- ADMIN
+- HR
+- MANAGER
+- USER
 
 ### Employee Management
 
-* Create Employee
-* Get All Employees
-* Get Employee by Employee ID
-* Update Employee
-* Delete Employee
+- Create employee
+- Get employee details
+- Get all employees
+- Update employee information
+- Delete employees
 
-### Advanced Listing
+### Advanced API Features
 
-* Pagination
-* Search by Employee ID, Full Name, and Email
-* Filter by Department
-* Filter by Designation
-* Sort by supported fields
-* Pagination metadata (page, limit, total records, total pages)
+- Search
+- Filtering
+- Sorting
+- Pagination
 
-### Error Handling
+### Validation
 
-* Centralized Error Middleware
-* Custom `ApiError`
-* Standardized `ApiResponse`
-* Async Error Handler
+- Joi request validation
+- Request body validation
+- Route parameter validation
+- Query parameter validation
 
-### Employee ID Generation
+### API Documentation
 
-Employees receive automatically generated IDs in the following format:
-
-```
-EMP0001
-EMP0002
-EMP0003
-```
+- Interactive Swagger documentation
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-* Node.js
-* Express.js
-* MongoDB
-* Mongoose
+| Technology | Purpose |
+| --- | --- |
+| Node.js | Runtime |
+| Express.js | Backend framework |
+| MongoDB | Database |
+| Mongoose | ODM |
+| JWT | Authentication |
+| bcryptjs | Password hashing |
+| Joi | Request validation |
+| Swagger | API documentation |
 
 ---
 
-# Project Structure
+## Project Structure
 
-```
+```text
 src
-│
 ├── config
-│
 ├── constants
-│
 ├── controllers
-│
 ├── middlewares
-│
 ├── models
-│
 ├── routes
-│
 ├── services
-│
 ├── utils
-│
-└── app.js
+└── validators
 ```
 
 ---
 
-# API Endpoints
+## Installation
 
-## Create Employee
+### Clone the repository
 
-```
-POST /employees
-```
-
----
-
-## Get All Employees
-
-```
-GET /employees
-```
-
-### Query Parameters
-
-| Parameter   | Description                          |
-| ----------- | ------------------------------------ |
-| page        | Page number                          |
-| limit       | Records per page                     |
-| search      | Search by Employee ID, Name or Email |
-| department  | Filter by Department                 |
-| designation | Filter by Designation                |
-| sortBy      | Field to sort                        |
-| order       | asc / desc                           |
-
-Example
-
-```
-GET /employees?page=1&limit=10&search=john&department=Engineering&sortBy=salary&order=desc
-```
-
----
-
-## Get Employee
-
-```
-GET /employees/:employeeId
-```
-
-Example
-
-```
-GET /employees/EMP0001
-```
-
----
-
-## Update Employee
-
-```
-PUT /employees/:employeeId
-```
-
----
-
-## Delete Employee
-
-```
-DELETE /employees/:employeeId
-```
-
----
-
-# Pagination Response
-
-```json
-{
-  "statusCode": 200,
-  "data": {
-    "employees": [
-      {
-        "employeeId": "EMP0001",
-        "fullName": "John Doe"
-      }
-    ],
-    "pagination": {
-      "page": 1,
-      "limit": 10,
-      "totalRecords": 25,
-      "totalPages": 3
-    }
-  },
-  "message": "Employees fetched successfully"
-}
-```
-
----
-
-# Installation
-
-Clone the repository
-
-```
+```bash
 git clone <repository-url>
 ```
 
-Install dependencies
+### Install dependencies
 
-```
+```bash
 npm install
 ```
 
-Create a `.env` file
+### Configure environment variables
 
-```
+Create a `.env` file:
+
+```env
 PORT=5000
 MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=your_admin_password
 ```
 
-Run the application
+### Start the server
 
-```
+```bash
 npm run dev
 ```
 
 ---
 
-# Design Decisions
+## API Documentation
 
-* Layered Architecture
-* Business Logic separated from Controllers
-* Centralized Error Handling
-* Dynamic Query Building
-* Auto-generated Employee IDs
-* Custom API Response Structure
-* Query Validation
-* Clean and Maintainable Code
+Open Swagger UI:
+
+```text
+http://localhost:5000/api-docs
+```
 
 ---
 
-# Future Enhancements
+## API Endpoints
 
-* JWT Authentication
-* Role-Based Access Control (RBAC)
-* Soft Delete
-* Request Validation using Joi
-* Unit Testing
-* Docker Support
-* API Documentation using Swagger
+### User APIs
+
+| Method | Endpoint | Access |
+| --- | --- | --- |
+| POST | `/users/register` | Public |
+| POST | `/users/login` | Public |
+| PATCH | `/users/{id}/role` | ADMIN |
+
+### Employee APIs
+
+| Method | Endpoint | Access |
+| --- | --- | --- |
+| POST | `/employees` | ADMIN, HR |
+| GET | `/employees` | All authenticated users |
+| GET | `/employees/{employeeId}` | All authenticated users |
+| PUT | `/employees/{employeeId}` | ADMIN, HR, MANAGER |
+| DELETE | `/employees/{employeeId}` | ADMIN |
 
 ---
 
-# Author
+## Role Permissions
+
+| Operation | ADMIN | HR | MANAGER | USER |
+| --- | :---: | :---: | :---: | :---: |
+| Create Employee | ✅ | ✅ | ❌ | ❌ |
+| View Employees | ✅ | ✅ | ✅ | ✅ |
+| Update Employee | ✅ | ✅ | ✅ | ❌ |
+| Delete Employee | ✅ | ❌ | ❌ | ❌ |
+| Assign Roles | ✅ | ❌ | ❌ | ❌ |
+
+---
+
+## Author
 
 **Shrushti Ponda**
 
-Backend Developer | Node.js | Express.js | MongoDB
+Backend Developer
+
+- Node.js
+- Express.js
+- MongoDB
+- REST APIs
+- JWT Authentication
+
+GitHub:
+
+https://github.com/shrushtiponda
